@@ -27,6 +27,7 @@ with pkgs; mkShell {
         # root CA certificates
         cacert
         which
+        gnumake
 
         libiconv  # required for building Cabal
         gmp       # required for GHC
