@@ -1,12 +1,11 @@
 module Main where
 
-import GHC.Generics
+import GHC.Generics (Generic)
 import Data.Aeson (eitherDecode)
-import Data.Aeson.Types
+import Data.Aeson.Types (FromJSON)
 import Text.RawString.QQ
 import Data.ByteString (ByteString)
 import Data.Either (isRight, partitionEithers)
-import qualified Data.NonEmptyText as TextNE
 
 -----------------------------------------------------------
 -- Liquid Haskell imports

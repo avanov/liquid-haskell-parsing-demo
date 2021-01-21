@@ -27,7 +27,6 @@ executable liquid-demo
                      , bytestring
                      , aeson
                      , raw-strings-qq
-                     , non-empty-text
 
 
   hs-source-dirs:      app
