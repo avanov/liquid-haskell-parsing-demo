@@ -1,0 +1,7 @@
+.idea/
+.venv*/
+.vagrant/
+.local/
+result
+dist-newstyle/
+.liquid/
