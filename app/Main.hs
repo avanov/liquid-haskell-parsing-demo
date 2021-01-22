@@ -13,11 +13,9 @@ import Data.Text as T
 import Data.Text.Unsafe as UT
 
 -- Specs: http://ucsd-progsys.github.io/liquidhaskell/specifications/
-{-@ measure tlen :: Text -> Int @-}
+{-@ measure txtLen :: Text -> Int @-}
 
-{-@ assume T.pack :: i:String -> {o:T.Text | len i == tlen o } @-}
-
-{-@ type TextNE = {v:T.Text | 0 < tlen v} @-}
+{-@ assume T.pack :: i:String -> {o:T.Text | len i == txtLen o } @-}
 -----------------------------------------------------------
 
 jsonValid   = [r| { "locations": ["Europe", "US", "Asia"], "payload": "Important" } |]
@@ -31,6 +29,7 @@ data RawData = RawData
     } deriving (Show, Eq, Ord, Generic, FromJSON)
 
 -- Domain Data
+{-@ type TextNE = {v:T.Text | 0 < txtLen v} @-}
 {-@ type Destinations = {ls: [ v:TextNE ] | 2 <= len ls}  @-}
 type Destinations = [T.Text]
 
@@ -63,15 +62,15 @@ processAPI json = do
 
                 parsedData = case dat of
                     [] -> Left "Invalid"
-                    _  -> Right $ T.pack dat
+                    _  -> Right . T.pack $ dat
 
 
 {-@ filterInvalid :: xs:[String] -> rv:[TextNE]  @-}
 filterInvalid :: [String] -> [Text]
 filterInvalid = snd . partitionEithers . Prelude.map nonEmptyData
 
-{-@ nonEmptyData :: x:String -> rv : (Either String {rght:TextNE | tlen rght == len x})   @-}
+{-@ nonEmptyData :: x:String -> rv : (Either String {rght:TextNE | txtLen rght == len x})   @-}
 nonEmptyData :: String -> Either String Text
 nonEmptyData x = case x of
     [] -> Left x
-    _ -> Right $ T.pack x
+    _  -> Right $ T.pack x
